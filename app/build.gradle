@@ -1,0 +1,36 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 27
+    defaultConfig {
+        applicationId "apps.kelvin.makau.scannerapp"
+        minSdkVersion 14
+        targetSdkVersion 26
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+repositories {
+    jcenter()
+    maven { url 'https://jitpack.io'}
+    maven { url 'http://www.baka.sk/maven2'}
+}
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'com.android.support:appcompat-v7:27.1.0'
+    implementation 'com.android.support:design:27.1.0'
+    implementation 'com.theartofdev.edmodo:android-image-cropper:2.6.+'
+    implementation 'org.innovatrics.mrz:mrz-java:0.4'
+
+
+    implementation 'com.google.android.gms:play-services-vision:11.8.0'
+
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+}
