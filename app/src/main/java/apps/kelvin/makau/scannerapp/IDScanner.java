@@ -1,47 +1,36 @@
  package apps.kelvin.makau.scannerapp;
 
 
- import android.Manifest;
  import android.content.Context;
- import android.content.Intent;
- import android.content.pm.PackageManager;
- import android.graphics.Bitmap;
- import android.graphics.BitmapFactory;
- import android.net.Uri;
- import android.os.Bundle;
- import android.os.Environment;
- import android.provider.MediaStore;
- import android.support.annotation.NonNull;
- import android.support.design.widget.FloatingActionButton;
- import android.support.v4.app.ActivityCompat;
- import android.support.v4.content.FileProvider;
- import android.support.v7.app.AppCompatActivity;
- import android.util.Log;
- import android.util.SparseArray;
- import android.view.View;
- import android.widget.Button;
- import android.widget.TextView;
- import android.widget.Toast;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.Bundle;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.util.SparseArray;
+import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
 
- import com.google.android.gms.vision.Frame;
- import com.google.android.gms.vision.text.Text;
- import com.google.android.gms.vision.text.TextBlock;
- import com.google.android.gms.vision.text.TextRecognizer;
- import com.innovatrics.mrz.MrzParseException;
- import com.innovatrics.mrz.MrzParser;
- import com.innovatrics.mrz.MrzRange;
- import com.innovatrics.mrz.MrzRecord;
- import com.innovatrics.mrz.records.MrtdTd1;
- import com.innovatrics.mrz.types.MrzDocumentCode;
- import com.innovatrics.mrz.types.MrzFormat;
- import com.theartofdev.edmodo.cropper.CropImage;
+import com.google.android.gms.vision.Frame;
+import com.google.android.gms.vision.text.Text;
+import com.google.android.gms.vision.text.TextBlock;
+import com.google.android.gms.vision.text.TextRecognizer;
+import com.theartofdev.edmodo.cropper.CropImage;
 
- import java.io.File;
- import java.io.FileNotFoundException;
- import java.util.regex.Matcher;
- import java.util.regex.Pattern;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
- import apps.kelvin.makau.scannerapp.BluePrints.BluePrint;
+import apps.kelvin.makau.scannerapp.BluePrints.BluePrint;
+ import apps.kelvin.makau.scannerapp.Mrz.CaptureActivity;
  import apps.kelvin.makau.scannerapp.models.Kipande;
 
  public class IDScanner extends AppCompatActivity {
@@ -65,17 +54,18 @@
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               /* ActivityCompat.requestPermissions(IDScanner.this, new
-                        String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_WRITE_PERMISSION);
-               // takePicture();*/
-                final String data_to_perse = "IDKYA2359260760<<3222<<<<<3222\n9401219M1402058<B031813279M<<3\nKELVIN<MAKAU<<<<<<<<<<<<<<<<<<";
-
-              //  Toast.makeText(IDScanner.this, String.valueOf(data_to_perse.length()), Toast.LENGTH_SHORT).show();
-               perseData(data_to_perse);
-
-                if(data_to_perse.trim().length()==90 && data_to_perse.trim().startsWith("IDKYA") && data_to_perse.trim().endsWith("<")){
-                    perseData(data_to_perse);
-                }
+                startActivity(new Intent(IDScanner.this, CaptureActivity.class));
+//               /* ActivityCompat.requestPermissions(IDScanner.this, new
+//                        String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_WRITE_PERMISSION);
+//               // takePicture();*/
+//                final String data_to_perse = "IDKYA2359260760<<3222<<<<<3222\n9401219M1402058<B031813279M<<3\nKELVIN<MAKAU<<<<<<<<<<<<<<<<<<";
+//
+//              //  Toast.makeText(IDScanner.this, String.valueOf(data_to_perse.length()), Toast.LENGTH_SHORT).show();
+//               perseData(data_to_perse);
+//
+//                if(data_to_perse.trim().length()==90 && data_to_perse.trim().startsWith("IDKYA") && data_to_perse.trim().endsWith("<")){
+//                    perseData(data_to_perse);
+//                }
             }
         });
 

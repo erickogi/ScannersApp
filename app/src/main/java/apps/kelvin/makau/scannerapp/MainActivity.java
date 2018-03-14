@@ -16,19 +16,15 @@
 
 package apps.kelvin.makau.scannerapp;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.app.Activity;
 import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.common.api.CommonStatusCodes;
-import com.innovatrics.mrz.MrzParser;
-import com.innovatrics.mrz.MrzRecord;
-import com.innovatrics.mrz.types.MrzFormat;
 
 /**
  * Main activity demonstrating how to pass extra parameters to an activity that
@@ -57,6 +53,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         useFlash = (CompoundButton) findViewById(R.id.use_flash);
 
         findViewById(R.id.read_text).setOnClickListener(this);
+
 
 
 
