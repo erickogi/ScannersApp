@@ -12,6 +12,7 @@
  import android.os.Environment;
  import android.provider.MediaStore;
  import android.support.annotation.NonNull;
+ import android.support.design.widget.FloatingActionButton;
  import android.support.v4.app.ActivityCompat;
  import android.support.v4.content.FileProvider;
  import android.support.v7.app.AppCompatActivity;
@@ -41,6 +42,7 @@
  import java.util.regex.Pattern;
 
  import apps.kelvin.makau.scannerapp.BluePrints.BluePrint;
+ import apps.kelvin.makau.scannerapp.models.Kipande;
 
  public class IDScanner extends AppCompatActivity {
     private static final String LOG_TAG = "Text API";
@@ -57,40 +59,53 @@
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_idscanner  );
-        Button button = (Button) findViewById(R.id.button);
-        scanResults = (TextView) findViewById(R.id.results);
-
+        FloatingActionButton button = findViewById(R.id.fab);
 
         detector = new TextRecognizer.Builder(getApplicationContext()).build();
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ActivityCompat.requestPermissions(IDScanner.this, new
+               /* ActivityCompat.requestPermissions(IDScanner.this, new
                         String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_WRITE_PERMISSION);
-               // takePicture();
+               // takePicture();*/
+                final String data_to_perse = "IDKYA2359260760<<3222<<<<<3222\n9401219M1402058<B031813279M<<3\nKELVIN<MAKAU<<<<<<<<<<<<<<<<<<";
 
+              //  Toast.makeText(IDScanner.this, String.valueOf(data_to_perse.length()), Toast.LENGTH_SHORT).show();
+               perseData(data_to_perse);
+
+                if(data_to_perse.trim().length()==90 && data_to_perse.trim().startsWith("IDKYA") && data_to_perse.trim().endsWith("<")){
+                    perseData(data_to_perse);
+                }
             }
         });
 
-        ////////////////////////////////////
-         final String data_to_perse = "IDKYA2359260760<<3222<<<<<3222\n9401219M1402058<B031813279M<<3\nKELVIN<MAKAU<<<<<<<<<<<<<<<<<<";
-
-         MrzRecord record = MrzParser.parse(data_to_perse);
 
 
 
-    Toast.makeText(this, record.documentNumber, Toast.LENGTH_SHORT).show();
-    Toast.makeText(this, "Serial: " +data_to_perse.subSequence(5,14).toString().replace("<",""), Toast.LENGTH_LONG).show();
-    Toast.makeText(this, "DOB: " +data_to_perse.subSequence(30,37).toString().replace("<",""), Toast.LENGTH_LONG).show();
-    Toast.makeText(this, "Sex: " +data_to_perse.subSequence(38,39).toString().replace("<",""), Toast.LENGTH_LONG).show();
-    Toast.makeText(this, "Date of Issue: " +data_to_perse.subSequence(39,45).toString().replace("<",""), Toast.LENGTH_LONG).show();
-         Toast.makeText(this, "Id No: " +data_to_perse.subSequence(49,57).toString().replace("<",""), Toast.LENGTH_LONG).show();
-         Toast.makeText(this, "Names: " +data_to_perse.subSequence(62,data_to_perse.length()).toString().replace("<"," ").trim(), Toast.LENGTH_LONG).show();
 
 
     }
 
-    @Override
+     private void perseData(String data) {
+
+         Kipande mKipande = new Kipande();
+         mKipande.setSerial_no(data.subSequence(5,14).toString().replace("<",""));
+         mKipande.setDob(data.subSequence(30,37).toString().replace("<",""));
+         mKipande.setSex(data.subSequence(38,39).toString().replace("<",""));
+         mKipande.setDoi(data.subSequence(39,45).toString().replace("<",""));
+         mKipande.setId_no(data.subSequence(49,57).toString().replace("<",""));
+         mKipande.setFull_names(data.subSequence(62,data.length()).toString().replace("<"," ").trim());
+         mKipande.setMRZ_lines(data.toString().trim());
+
+        Intent intent = new Intent(this,AfterDetails.class);
+
+        intent.putExtra("Data",mKipande);
+        startActivity(intent);
+
+
+     }
+
+     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
@@ -147,7 +162,7 @@
                             }
                         }
                         if (textBlocks.size() == 0) {
-                            scanResults.setText("Scan Failed: Found nothing to scan");
+
                         } else {
 
                             if (blocks.toUpperCase().startsWith("IDKYA")) {
@@ -162,11 +177,7 @@
                                     startActivity(datas);*/
 
                                 Toast.makeText(this, data_parsed.toString().trim(), Toast.LENGTH_SHORT).show();
-                                scanResults.setText(scanResults.getText() + "MRZ block: " + "\n");
-                                scanResults.setText(scanResults.getText() + data_parsed.toString().trim() + "\n");
 
-                                scanResults.setText(scanResults.getText() + "---------" + "\n");
-                                scanResults.setText(scanResults.getText() + "Parsed: " + "\n");
 
                                 if(checkKYA(data_parsed.toString().trim()) && data_parsed.toString().length() == 90)
                                 Toast.makeText(this, "Serial: " +data_parsed.toString().trim().subSequence(5,14).toString().replace("<",""), Toast.LENGTH_LONG).show();
