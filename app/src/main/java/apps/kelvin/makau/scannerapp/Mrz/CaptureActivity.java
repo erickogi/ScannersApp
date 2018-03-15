@@ -70,6 +70,7 @@ import apps.kelvin.makau.scannerapp.AfterDetails;
 import apps.kelvin.makau.scannerapp.Mrz.camera.CameraManager;
 import apps.kelvin.makau.scannerapp.Mrz.camera.ShutterButton;
 import apps.kelvin.makau.scannerapp.R;
+import apps.kelvin.makau.scannerapp.Utills.AppUtillsMrz;
 import apps.kelvin.makau.scannerapp.models.Kipande;
 
 /**
@@ -797,51 +798,21 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
             progressView.setVisibility(View.GONE);
             setProgressBarVisibility(false);
 
-            perseData(ocrResult.getText());
+
+            Kipande kipande=AppUtillsMrz. perseData(ocrResult.getText());
+           if(kipande!=null){
+
+
+               Intent intent = new Intent(this,AfterDetails.class);
+
+               intent.putExtra("Data",kipande);
+               startActivity(intent);
+           }
 
         }
         return true;
     }
-    private void perseData(String data) {
 
-        Kipande mKipande = new Kipande();
-        try {
-            mKipande.setSerial_no(data.subSequence(5, 14).toString().replace("<", ""));
-        }catch (Exception nm){
-
-        }try {
-        mKipande.setDob(data.subSequence(30,37).toString().replace("<",""));
-    }catch (Exception nm){
-
-    }try {
-        mKipande.setSex(data.subSequence(38,39).toString().replace("<",""));
-}catch (Exception nm){
-
-        }try {
-        mKipande.setDoi(data.subSequence(39,45).toString().replace("<",""));
-        }catch (Exception nm){
-
-        }try {
-        mKipande.setId_no(data.subSequence(49,57).toString().replace("<",""));
-        }catch (Exception nm){
-
-        }try {
-        mKipande.setFull_names(data.subSequence(62,data.length()).toString().replace("<"," ").trim());
-        }catch (Exception nm){
-
-        }try {
-        mKipande.setMRZ_lines(data.toString().trim());
-        }catch (Exception nm){
-
-        }
-
-        Intent intent = new Intent(this,AfterDetails.class);
-
-        intent.putExtra("Data",mKipande);
-        startActivity(intent);
-
-
-    }
     /**
      * Displays information relating to the results of a successful real-time OCR request.
      *
