@@ -5,15 +5,18 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
-
-    <supports-screens android:xlargeScreens="true"
+    <supports-screens
         android:largeScreens="true"
         android:normalScreens="true"
-        android:smallScreens="true" />
+        android:smallScreens="true"
+        android:xlargeScreens="true" />
+
     <uses-feature android:name="android.hardware.camera.autofocus" />
-    <uses-feature android:name="android.hardware.camera.flash" android:required="false" />
-    <uses-feature android:name="android.hardware.camera"/>
-    <uses-feature android:name="android.hardware.screen.landscape"/>
+    <uses-feature
+        android:name="android.hardware.camera.flash"
+        android:required="false" />
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.screen.landscape" />
 
     <application
         android:allowBackup="true"
@@ -36,37 +39,34 @@
         </activity>
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
-            android:parentActivityName= ".IDScanner" />
+            android:parentActivityName=".IDScanner" />
         <activity
             android:name=".OcrCaptureActivity"
             android:label="Read Text" />
-        <activity android:name=".AfterDetails"
+        <activity
+            android:name=".AfterDetails"
             android:label="Confirm Details"
-            android:parentActivityName= ".IDScanner"
-            />
-
-        <activity android:name=".Mrz.CaptureActivity"
-            android:screenOrientation="landscape"
+            android:parentActivityName=".IDScanner" />
+        <activity
+            android:name=".Mrz.CaptureActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="landscape"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
-            android:windowSoftInputMode="stateAlwaysHidden"
-            >
-
-        </activity>
-        <activity android:name=".Mrz.HelpActivity"
+            android:windowSoftInputMode="stateAlwaysHidden"></activity>
+        <activity
+            android:name=".Mrz.HelpActivity"
             android:screenOrientation="user">
             <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
-                <category android:name="android.intent.category.DEFAULT"/>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-
         <activity android:name=".Mrz.PreferencesActivity" />
-
-
-
-
-
+        <activity
+            android:name=".Vistor"
+            android:label="@string/title_activity_vistor"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

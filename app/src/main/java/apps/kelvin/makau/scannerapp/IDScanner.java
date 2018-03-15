@@ -2,35 +2,48 @@
 
 
  import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
-import android.os.Bundle;
-import android.provider.MediaStore;
-import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.util.SparseArray;
-import android.view.View;
-import android.widget.TextView;
-import android.widget.Toast;
+ import android.content.DialogInterface;
+ import android.content.Intent;
+ import android.content.pm.PackageManager;
+ import android.database.Cursor;
+ import android.graphics.Bitmap;
+ import android.graphics.BitmapFactory;
+ import android.net.Uri;
+ import android.os.Bundle;
+ import android.provider.MediaStore;
+ import android.support.annotation.NonNull;
+ import android.support.design.widget.FloatingActionButton;
+ import android.support.v7.app.AlertDialog;
+ import android.support.v7.app.AppCompatActivity;
+ import android.support.v7.widget.DefaultItemAnimator;
+ import android.support.v7.widget.RecyclerView;
+ import android.support.v7.widget.StaggeredGridLayoutManager;
+ import android.util.Log;
+ import android.util.SparseArray;
+ import android.view.View;
+ import android.widget.ImageView;
+ import android.widget.TextView;
+ import android.widget.Toast;
 
-import com.google.android.gms.vision.Frame;
-import com.google.android.gms.vision.text.Text;
-import com.google.android.gms.vision.text.TextBlock;
-import com.google.android.gms.vision.text.TextRecognizer;
-import com.theartofdev.edmodo.cropper.CropImage;
+ import com.google.android.gms.vision.Frame;
+ import com.google.android.gms.vision.text.Text;
+ import com.google.android.gms.vision.text.TextBlock;
+ import com.google.android.gms.vision.text.TextRecognizer;
+ import com.theartofdev.edmodo.cropper.CropImage;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+ import java.io.File;
+ import java.io.FileNotFoundException;
+ import java.util.ArrayList;
+ import java.util.regex.Matcher;
+ import java.util.regex.Pattern;
 
-import apps.kelvin.makau.scannerapp.BluePrints.BluePrint;
+ import apps.kelvin.makau.scannerapp.Adapters.KipandeListAdapter;
+ import apps.kelvin.makau.scannerapp.BluePrints.BluePrint;
  import apps.kelvin.makau.scannerapp.Mrz.CaptureActivity;
+ import apps.kelvin.makau.scannerapp.Sqlite.DbConstants;
+ import apps.kelvin.makau.scannerapp.Sqlite.DbContentValues;
+ import apps.kelvin.makau.scannerapp.Sqlite.DbOperations;
+ import apps.kelvin.makau.scannerapp.Utills.UtilListeners.OnclickRecyclerListener;
  import apps.kelvin.makau.scannerapp.models.Kipande;
 
  public class IDScanner extends AppCompatActivity {
@@ -44,6 +57,12 @@ import apps.kelvin.makau.scannerapp.BluePrints.BluePrint;
 
      private Uri fimgUri;
 
+     private RecyclerView recyclerView;
+     private DbOperations dbOperations ;
+     private KipandeListAdapter listAdapter;
+     private ArrayList<Kipande> kipandes=new ArrayList<>();
+     private StaggeredGridLayoutManager mStaggeredLayoutManager;
+
      @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,26 +74,110 @@ import apps.kelvin.makau.scannerapp.BluePrints.BluePrint;
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(IDScanner.this, CaptureActivity.class));
-//               /* ActivityCompat.requestPermissions(IDScanner.this, new
-//                        String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_WRITE_PERMISSION);
-//               // takePicture();*/
-//                final String data_to_perse = "IDKYA2359260760<<3222<<<<<3222\n9401219M1402058<B031813279M<<3\nKELVIN<MAKAU<<<<<<<<<<<<<<<<<<";
-//
-//              //  Toast.makeText(IDScanner.this, String.valueOf(data_to_perse.length()), Toast.LENGTH_SHORT).show();
-//               perseData(data_to_perse);
-//
-//                if(data_to_perse.trim().length()==90 && data_to_perse.trim().startsWith("IDKYA") && data_to_perse.trim().endsWith("<")){
-//                    perseData(data_to_perse);
-//                }
+
             }
         });
 
 
+         dbOperations=new DbOperations(IDScanner.this);
+         recyclerView=findViewById(R.id.recyclerView);
 
+
+         initViews();
+
+
+
+         
 
 
 
     }
+     private void  initViews(){
+         mStaggeredLayoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
+
+         recyclerView.setLayoutManager(mStaggeredLayoutManager);
+         recyclerView.setItemAnimator(new DefaultItemAnimator());
+         DbContentValues dbContentValues=new DbContentValues();
+         kipandes=new ArrayList<>();
+         Cursor cursor=dbOperations.select(DbConstants.TABLE_DATA);
+         if(cursor!=null){
+             kipandes=dbContentValues.getKipande(cursor,false);
+
+             listAdapter=new KipandeListAdapter(IDScanner.this, kipandes, new OnclickRecyclerListener() {
+                 @Override
+                 public void onClickListener(int position) {
+
+                     Intent intent = new Intent(IDScanner.this,Vistor.class);
+
+                     intent.putExtra("Data",kipandes.get(position));
+                     startActivity(intent);
+                 }
+
+                 @Override
+                 public void onLongClickListener(int position) {
+
+                     try {
+                         dialogDelete(kipandes.get(position).getKEY_ID());
+                     }catch (Exception nm){
+                         nm.printStackTrace();
+                     }
+
+                 }
+
+                 @Override
+                 public void onClickListener(int adapterPosition, ImageView imageView) {
+
+                 }
+             });
+
+             listAdapter.notifyDataSetChanged();
+             recyclerView.setAdapter(listAdapter);
+
+             if(listAdapter.getItemCount()>0){
+                 TextView textView=findViewById(R.id.textView);
+                 textView.setVisibility(View.GONE);
+                 recyclerView.setVisibility(View.VISIBLE);
+             }else {
+                 TextView textView=findViewById(R.id.textView);
+                 textView.setVisibility(View.VISIBLE);
+                 recyclerView.setVisibility(View.GONE);
+             }
+
+
+         }
+     }
+
+     private void dialogDelete(final int itemId) {
+
+         final DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+             @Override
+             public void onClick(DialogInterface dialog, int which) {
+                 switch (which) {
+                     case DialogInterface.BUTTON_POSITIVE:
+                         //popOutFragments();
+                         if(dbOperations.delete(DbConstants.TABLE_DATA,DbConstants.KEY_ID,itemId)) {
+                             initViews();
+                             dialog.dismiss();
+                         }
+                         initViews();
+
+                         break;
+                     case DialogInterface.BUTTON_NEGATIVE:
+                         dialog.dismiss();
+                         initViews();
+
+                         break;
+                 }
+             }
+         };
+
+
+         AlertDialog.Builder builder = new AlertDialog.Builder(IDScanner.this);
+
+         builder.setMessage("Delete This Entry ?").setPositiveButton("Okay", dialogClickListener)
+                 .setNegativeButton("Dismiss", dialogClickListener)
+                 .show();
+     }
 
      private void perseData(String data) {
 
@@ -108,7 +211,13 @@ import apps.kelvin.makau.scannerapp.BluePrints.BluePrint;
         }
     }
 
-    @Override
+     @Override
+     protected void onResume() {
+         super.onResume();
+         initViews();
+     }
+
+     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == PHOTO_REQUEST && resultCode == RESULT_OK) {
 

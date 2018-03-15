@@ -24,7 +24,20 @@
         android:layout_gravity="bottom|end"
         android:layout_marginRight="5dp"
         tools:ignore="VectorDrawableCompat" />
+    <android.support.v7.widget.RecyclerView
 
+        android:visibility="visible"
+        android:id="@+id/recyclerView"
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="0dp"
+
+
+
+
+        >
+    </android.support.v7.widget.RecyclerView>
     <TextView
         android:drawablePadding="14dp"
         android:drawableTop="@drawable/backid_white"

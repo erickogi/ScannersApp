@@ -8,23 +8,100 @@ import android.os.Parcelable;
  */
 
 public class Kipande implements Parcelable {
-    String Serial_no;
-    String MRZ_lines;
-    String Country_code;
-    String Dob;
-    String Sex;
-    String Full_names;
-    String Doi;
-    String Id_no;
-    String Country;
-    String Img_path;
+
+    private int KEY_ID;
+    private String Serial_no;
+    private String MRZ_lines;
+    private String Country_code;
+    private String Dob;
+    private String Sex;
+    private String Full_names;
+    private String Date_of_issue;
+    private String Id_no;
+    private String Country;
+    private String Img_path;
+
+    private String TimeStamp;
+
+
+
+    private String Vehicle_plate;
+    private String Office;
+    private String Visit_type;
+    private String check_out_time;
+    private String comment;
+
+
+    public int getKEY_ID() {
+        return KEY_ID;
+    }
+
+    public void setKEY_ID(int KEY_ID) {
+        this.KEY_ID = KEY_ID;
+    }
+
+    public String getVehicle_plate() {
+        return Vehicle_plate != null ? Vehicle_plate : "Nill";
+    }
+
+    public void setVehicle_plate(String vehicle_plate) {
+        Vehicle_plate = vehicle_plate;
+    }
+
+    public String getOffice() {
+        return Office != null ? Office : "Nill";
+    }
+
+    public void setOffice(String office) {
+        Office = office;
+    }
+
+    public String getVisit_type() {
+        return Visit_type != null ? Visit_type : "Nill";
+    }
+
+    public void setVisit_type(String visit_type) {
+        Visit_type = visit_type;
+    }
+
+    public String getCheck_out_time() {
+        return check_out_time != null ? check_out_time : "Nill";
+    }
+
+    public void setCheck_out_time(String check_out_time) {
+        this.check_out_time = check_out_time;
+    }
+
+    public String getComment() {
+        return comment != null ? comment : "Nill";
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
+    public String getDate_of_issue() {
+        return Date_of_issue != null ? Date_of_issue : "Nill";
+    }
+
+    public void setDate_of_issue(String date_of_issue) {
+        Date_of_issue = date_of_issue;
+    }
+
+    public String getTimeStamp() {
+        return TimeStamp != null ? TimeStamp : "Nill";
+    }
+
+    public void setTimeStamp(String timeStamp) {
+        TimeStamp = timeStamp;
+    }
 
     public Kipande() {
     }
 
     public String getSerial_no() {
 
-        return Serial_no != null ? Serial_no : "Not Found";
+        return Serial_no != null ? Serial_no : "Nill";
     }
 
     public void setSerial_no(String serial_no) {
@@ -40,7 +117,7 @@ public class Kipande implements Parcelable {
     }
 
     public String getCountry_code() {
-        return Country_code;
+        return Country_code != null ? Country_code : "KYA";
     }
 
     public void setCountry_code(String country_code) {
@@ -48,7 +125,7 @@ public class Kipande implements Parcelable {
     }
 
     public String getDob() {
-        return Dob;
+        return Dob != null ? Dob : "000000";
     }
 
     public void setDob(String dob) {
@@ -56,7 +133,7 @@ public class Kipande implements Parcelable {
     }
 
     public String getSex() {
-        return Sex;
+        return Sex != null ? Sex : "N";
     }
 
     public void setSex(String sex) {
@@ -64,7 +141,7 @@ public class Kipande implements Parcelable {
     }
 
     public String getFull_names() {
-        return Full_names;
+        return Full_names != null ? Full_names : "Nill";
     }
 
     public void setFull_names(String full_names) {
@@ -72,15 +149,15 @@ public class Kipande implements Parcelable {
     }
 
     public String getDoi() {
-        return Doi;
+        return Date_of_issue != null ? Date_of_issue : "Nill";
     }
 
     public void setDoi(String doi) {
-        Doi = doi;
+        Date_of_issue = doi;
     }
 
     public String getId_no() {
-        return Id_no;
+        return Id_no != null ? Id_no : "Not Found";
     }
 
     public void setId_no(String id_no) {
@@ -88,7 +165,7 @@ public class Kipande implements Parcelable {
     }
 
     public String getCountry() {
-        return Country;
+        return Country != null ? Country : "Kenya";
     }
 
     public void setCountry(String country) {
@@ -96,7 +173,7 @@ public class Kipande implements Parcelable {
     }
 
     public String getImg_path() {
-        return Img_path;
+        return Img_path != null ? Img_path : "";
     }
 
     public void setImg_path(String img_path) {
@@ -116,10 +193,24 @@ public class Kipande implements Parcelable {
         dest.writeString(this.Dob);
         dest.writeString(this.Sex);
         dest.writeString(this.Full_names);
-        dest.writeString(this.Doi);
+        dest.writeString(this.Date_of_issue);
         dest.writeString(this.Id_no);
         dest.writeString(this.Country);
         dest.writeString(this.Img_path);
+        dest.writeInt(this.KEY_ID);
+
+
+
+
+
+
+        dest.writeString(this.TimeStamp);
+        dest.writeString(this.Vehicle_plate);
+        dest.writeString(this.Office);
+        dest.writeString(this.Visit_type);
+        dest.writeString(this.check_out_time);
+        dest.writeString(this.comment);
+
     }
 
     protected Kipande(Parcel in) {
@@ -129,10 +220,22 @@ public class Kipande implements Parcelable {
         this.Dob = in.readString();
         this.Sex = in.readString();
         this.Full_names = in.readString();
-        this.Doi = in.readString();
+        this.Date_of_issue = in.readString();
         this.Id_no = in.readString();
         this.Country = in.readString();
         this.Img_path = in.readString();
+        this.KEY_ID = in.readInt();
+
+
+        this.TimeStamp = in.readString();
+        this.Vehicle_plate = in.readString();
+        this.Office = in.readString();
+        this.Visit_type = in.readString();
+        this.check_out_time = in.readString();
+        this.comment = in.readString();
+
+
+
     }
 
     public static final Creator<Kipande> CREATOR = new Creator<Kipande>() {
