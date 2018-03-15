@@ -54,7 +54,7 @@
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
             android:windowSoftInputMode="stateAlwaysHidden"></activity>
         <activity
-            android:name=".Mrz.HelpActivity"
+            android:name=".Utills.HelpActivity"
             android:screenOrientation="user">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />

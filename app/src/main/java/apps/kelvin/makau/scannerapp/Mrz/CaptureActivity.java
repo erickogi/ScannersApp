@@ -71,14 +71,13 @@ import apps.kelvin.makau.scannerapp.Mrz.camera.CameraManager;
 import apps.kelvin.makau.scannerapp.Mrz.camera.ShutterButton;
 import apps.kelvin.makau.scannerapp.R;
 import apps.kelvin.makau.scannerapp.Utills.AppUtillsMrz;
+import apps.kelvin.makau.scannerapp.Utills.HelpActivity;
 import apps.kelvin.makau.scannerapp.models.Kipande;
 
 /**
- * This activity opens the camera and does the actual scanning on a background thread. It draws a
- * viewfinder to help the user place the text correctly, shows feedback as the image processing
- * is happening, and then overlays the results when a scan is successful.
+
  * <p>
- * The code for this class was adapted from the ZXing project: http://code.google.com/p/zxing/
+ *
  */
 public final class CaptureActivity extends Activity implements SurfaceHolder.Callback,
         ShutterButton.OnShutterButtonListener {
@@ -813,11 +812,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         return true;
     }
 
-    /**
-     * Displays information relating to the results of a successful real-time OCR request.
-     *
-     * @param ocrResult Object representing successful OCR results
-     */
+
     void handleOcrContinuousDecode(OcrResult ocrResult) {
 
         lastResult = ocrResult;

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package apps.kelvin.makau.scannerapp.Mrz;
+package apps.kelvin.makau.scannerapp.Utills;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -33,11 +33,7 @@ import android.widget.Button;
 
 import apps.kelvin.makau.scannerapp.R;
 
-/**
- * Activity to display informational pages to the user in a WebView.
- * 
- * The code for this class was adapted from the ZXing project: http://code.google.com/p/zxing
- */
+
 public final class HelpActivity extends Activity {
 
   private static final String TAG = HelpActivity.class.getSimpleName();

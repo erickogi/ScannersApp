@@ -18,16 +18,9 @@ package apps.kelvin.makau.scannerapp.Mrz;
 
 import android.graphics.Bitmap;
 
-/**
- * This object extends LuminanceSource around an array of YUV data returned from the camera driver,
- * with the option to crop to a rectangle within the full data. This can be used to exclude
- * superfluous pixels around the perimeter and speed up decoding.
- *
- * It works for any pixel format where the Y channel is planar and appears first, including
- * YCbCr_420_SP and YCbCr_422_SP.
- *
- * The code for this class was adapted from the ZXing project: http://code.google.com/p/zxing
- */
+
+
+
 public final class PlanarYUVLuminanceSource extends LuminanceSource {
 
   private final byte[] yuvData;

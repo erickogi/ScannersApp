@@ -32,11 +32,7 @@ import com.googlecode.tesseract.android.TessBaseAPI;
 
 import apps.kelvin.makau.scannerapp.R;
 
-/**
- * Class to send bitmap data for OCR.
- * 
- * The code for this class was adapted from the ZXing project: http://code.google.com/p/zxing/
- */
+
 final class DecodeHandler extends Handler {
 
   private final CaptureActivity activity;
