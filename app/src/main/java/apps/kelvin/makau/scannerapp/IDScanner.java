@@ -2,57 +2,62 @@
 
 
  import android.content.Context;
- import android.content.DialogInterface;
- import android.content.Intent;
- import android.content.pm.PackageManager;
- import android.database.Cursor;
- import android.graphics.Bitmap;
- import android.graphics.BitmapFactory;
- import android.net.Uri;
- import android.os.Bundle;
- import android.provider.MediaStore;
- import android.support.annotation.NonNull;
- import android.support.design.widget.FloatingActionButton;
- import android.support.v7.app.AlertDialog;
- import android.support.v7.app.AppCompatActivity;
- import android.support.v7.widget.DefaultItemAnimator;
- import android.support.v7.widget.RecyclerView;
- import android.support.v7.widget.StaggeredGridLayoutManager;
- import android.util.Log;
- import android.util.SparseArray;
- import android.view.View;
- import android.widget.ImageView;
- import android.widget.TextView;
- import android.widget.Toast;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.Bundle;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Log;
+import android.util.SparseArray;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
- import com.google.android.gms.vision.Frame;
- import com.google.android.gms.vision.text.Text;
- import com.google.android.gms.vision.text.TextBlock;
- import com.google.android.gms.vision.text.TextRecognizer;
- import com.theartofdev.edmodo.cropper.CropImage;
+import com.google.android.gms.vision.Frame;
+import com.google.android.gms.vision.text.Text;
+import com.google.android.gms.vision.text.TextBlock;
+import com.google.android.gms.vision.text.TextRecognizer;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
- import java.io.File;
- import java.io.FileNotFoundException;
- import java.util.ArrayList;
- import java.util.regex.Matcher;
- import java.util.regex.Pattern;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
- import apps.kelvin.makau.scannerapp.Adapters.KipandeListAdapter;
- import apps.kelvin.makau.scannerapp.BluePrints.BluePrint;
- import apps.kelvin.makau.scannerapp.Mrz.CaptureActivity;
- import apps.kelvin.makau.scannerapp.Sqlite.DbConstants;
- import apps.kelvin.makau.scannerapp.Sqlite.DbContentValues;
- import apps.kelvin.makau.scannerapp.Sqlite.DbOperations;
- import apps.kelvin.makau.scannerapp.Utills.UtilListeners.OnclickRecyclerListener;
- import apps.kelvin.makau.scannerapp.models.Kipande;
+import apps.kelvin.makau.scannerapp.Adapters.KipandeListAdapter;
+import apps.kelvin.makau.scannerapp.BluePrints.BluePrint;
+import apps.kelvin.makau.scannerapp.Mrz.CaptureActivity;
+import apps.kelvin.makau.scannerapp.Sqlite.DbConstants;
+import apps.kelvin.makau.scannerapp.Sqlite.DbContentValues;
+import apps.kelvin.makau.scannerapp.Sqlite.DbOperations;
+import apps.kelvin.makau.scannerapp.Utills.UtilListeners.OnclickRecyclerListener;
+import apps.kelvin.makau.scannerapp.models.Kipande;
 
- public class IDScanner extends AppCompatActivity {
+ public class IDScanner extends AppCompatActivity implements DatePickerDialog.OnDateSetListener{
     private static final String LOG_TAG = "Text API";
     private static final int PHOTO_REQUEST = 10;
     private TextView scanResults;
     private Uri imageUri;
     private TextRecognizer detector;
     private static final int REQUEST_WRITE_PERMISSION = 20;
+    private SearchView search_bar;
+    private   String date="";
 
 
      private Uri fimgUri;
@@ -82,8 +87,10 @@
          dbOperations=new DbOperations(IDScanner.this);
          recyclerView=findViewById(R.id.recyclerView);
 
+         search_bar=findViewById(R.id.search_bar);
+         search_bar.setOnClickListener(v -> search_bar.setIconified(false));
 
-         initViews();
+         initViews(getKipandes(getSearch()));
 
 
 
@@ -92,22 +99,34 @@
 
 
     }
-     private void  initViews(){
+
+     private String getSearch() {
+         return !search_bar.getQuery().toString().isEmpty() ? search_bar.getQuery().toString() : "";
+     }
+
+     private ArrayList<Kipande> getKipandes(String search){
+        DbContentValues dbContentValues=new DbContentValues();
+        kipandes=new ArrayList<>();
+        Cursor cursor=dbOperations.search(search,date);
+        if(cursor!=null) {
+            return kipandes = dbContentValues.getKipande(cursor, false);
+        }else return new ArrayList<>();
+
+    }
+     private void  initViews(final ArrayList<Kipande> kipandes){
          mStaggeredLayoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
 
+         search_bar=findViewById(R.id.search_bar);
          recyclerView.setLayoutManager(mStaggeredLayoutManager);
          recyclerView.setItemAnimator(new DefaultItemAnimator());
-         DbContentValues dbContentValues=new DbContentValues();
-         kipandes=new ArrayList<>();
-         Cursor cursor=dbOperations.select(DbConstants.TABLE_DATA);
-         if(cursor!=null){
-             kipandes=dbContentValues.getKipande(cursor,false);
+         if(kipandes!=null){
 
              listAdapter=new KipandeListAdapter(IDScanner.this, kipandes, new OnclickRecyclerListener() {
                  @Override
                  public void onClickListener(int position) {
 
                      Intent intent = new Intent(IDScanner.this,Vistor.class);
+
 
                      intent.putExtra("Data",kipandes.get(position));
                      startActivity(intent);
@@ -145,6 +164,29 @@
 
 
          }
+
+
+         search_bar.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+             @Override
+             public boolean onQueryTextSubmit(String query) {
+                 return false;
+             }
+
+             @Override
+             public boolean onQueryTextChange(String newText) {
+
+                 if(newText!=null&&!newText.isEmpty()){
+
+                     initViews(getKipandes(getSearch()));
+                 }else {
+                     initViews(getKipandes(""));
+                 }
+
+                 return false;
+             }
+         });
+
+
      }
 
      private void dialogDelete(final int itemId) {
@@ -156,15 +198,15 @@
                      case DialogInterface.BUTTON_POSITIVE:
                          //popOutFragments();
                          if(dbOperations.delete(DbConstants.TABLE_DATA,DbConstants.KEY_ID,itemId)) {
-                             initViews();
+                             initViews(getKipandes(getSearch()));
                              dialog.dismiss();
                          }
-                         initViews();
+                         initViews(getKipandes(getSearch()));
 
                          break;
                      case DialogInterface.BUTTON_NEGATIVE:
                          dialog.dismiss();
-                         initViews();
+                         initViews(getKipandes(getSearch()));
 
                          break;
                  }
@@ -214,7 +256,7 @@
      @Override
      protected void onResume() {
          super.onResume();
-         initViews();
+         initViews(getKipandes(getSearch()));
      }
 
      @Override
@@ -377,4 +419,28 @@ String data="";
         return BitmapFactory.decodeStream(ctx.getContentResolver()
                 .openInputStream(uri), null, bmOptions);
     }
-}
+
+     public void datePicker(View view) {
+
+         Calendar now = Calendar.getInstance();
+         DatePickerDialog dpd = DatePickerDialog.newInstance(IDScanner.this,
+                 now.get(Calendar.YEAR),
+                 now.get(Calendar.MONTH),
+                 now.get(Calendar.DAY_OF_MONTH));
+         dpd.setThemeDark(true);
+         dpd.vibrate(true);
+         dpd.dismissOnPause(true);
+         dpd.showYearPickerFirst(true);
+         //dpd.setMaxDate(now);//Date(now);
+         dpd.setVersion(DatePickerDialog.Version.VERSION_2);
+
+         dpd.show(getFragmentManager(), "DatePicker");
+     }
+
+
+     @Override
+     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
+          date=""+year+""+monthOfYear+""+dayOfMonth;
+         initViews(getKipandes(getSearch()));
+     }
+ }

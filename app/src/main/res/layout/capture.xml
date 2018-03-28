@@ -66,8 +66,8 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content">
 
-          <TextView android:id="@+id/source_language_text_view_label"
-                    android:layout_width="wrap_content"
+          <TextView
+              android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="OCR"
                     android:textColor="@color/result_minor_text"
@@ -141,8 +141,8 @@
                         android:layout_height="wrap_content"
                         >
             
-              <ProgressBar android:id="@+id/progress_small"
-		                   style="?android:attr/progressBarStyleSmall" 
+              <ProgressBar
+                  style="?android:attr/progressBarStyleSmall"
 		                   android:layout_width="wrap_content"
                            android:layout_height="wrap_content"
                            android:paddingLeft="12dip" 
@@ -179,13 +179,14 @@
               android:layout_height="wrap_content"
               android:background="@drawable/shutter_button"
               android:clickable="true"
+        android:layout_alignParentBottom="true"
               android:focusable="true"
               android:layout_alignParentRight="true"
               android:gravity="center_vertical"
               android:layout_marginRight="8dip"
               android:layout_marginTop="8dip"
               android:scaleType="center"
-              android:visibility="gone" /> 
+              android:visibility="gone" />
      
     <TextView android:id="@+id/status_view_bottom"
               android:layout_width="wrap_content"

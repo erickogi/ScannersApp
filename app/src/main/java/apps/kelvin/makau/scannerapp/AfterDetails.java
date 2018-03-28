@@ -21,15 +21,19 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.android.volley.error.VolleyError;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.vision.text.TextRecognizer;
 
 import java.io.File;
 
 import apps.kelvin.makau.scannerapp.BluePrints.BluePrint;
+import apps.kelvin.makau.scannerapp.NetworkUtills.ApiConstants;
+import apps.kelvin.makau.scannerapp.NetworkUtills.DumbVolleyRequest;
 import apps.kelvin.makau.scannerapp.Sqlite.DbContentValues;
 import apps.kelvin.makau.scannerapp.Utills.DateTimeUtils;
 import apps.kelvin.makau.scannerapp.Utills.GeneralUtills;
+import apps.kelvin.makau.scannerapp.Utills.UtilListeners.RequestListener;
 import apps.kelvin.makau.scannerapp.models.Kipande;
 
 import static apps.kelvin.makau.scannerapp.Utills.GeneralUtills.isFilledTextInputEditText;
@@ -235,44 +239,69 @@ private Button btnSave;
                 mkips.setCheck_out_time("Nill");
                 Log.d("data","Office "+office+" Car  "+car+" visit  "+visit+" ");
 
-                new DbContentValues.loadKipande(mkips, AfterDetails.this, new DbContentValues.MyInterface() {
+
+                DumbVolleyRequest.kipande(mkips.getImg_path(), mkips, ApiConstants.upload, new RequestListener() {
                     @Override
-                    public void onComplete(boolean result) {
-                        if(result){
-                            View.OnClickListener listener = new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    finish();
-                                }
-                            };
+                    public void onError(VolleyError error) {
 
-                            Snackbar.make(btnSave, "Saved Successfully",
-                                    Snackbar.LENGTH_INDEFINITE)
-                                    .setAction(R.string.ok, listener)
-                                    .show();
-
-
-                        }else {
-                            View.OnClickListener listener = new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    //finish();
-
-                                }
-                            };
-
-                            Snackbar.make(btnSave, "Error Saving",
-                                    Snackbar.LENGTH_INDEFINITE)
-                                    .setAction(R.string.ok, listener)
-                                    .show();
-                        }
                     }
-                }).execute();
+
+                    @Override
+                    public void onError(String error) {
+
+                    }
+
+                    @Override
+                    public void onSuccess(String response) {
+
+
+                        saveToDb(mkips);
+
+                    }
+                });
+
+
             }
 
 
 
 
         }
+    }
+
+    private void saveToDb(Kipande mkips){
+        new DbContentValues.loadKipande(mkips, AfterDetails.this, new DbContentValues.MyInterface() {
+            @Override
+            public void onComplete(boolean result) {
+                if(result){
+                    View.OnClickListener listener = new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            finish();
+                        }
+                    };
+
+                    Snackbar.make(btnSave, "Saved Successfully",
+                            Snackbar.LENGTH_INDEFINITE)
+                            .setAction(R.string.ok, listener)
+                            .show();
+
+
+                }else {
+                    View.OnClickListener listener = new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            //finish();
+
+                        }
+                    };
+
+                    Snackbar.make(btnSave, "Error Saving",
+                            Snackbar.LENGTH_INDEFINITE)
+                            .setAction(R.string.ok, listener)
+                            .show();
+                }
+            }
+        }).execute();
     }
 }

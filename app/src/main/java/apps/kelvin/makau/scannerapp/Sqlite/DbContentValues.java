@@ -22,6 +22,7 @@ public class DbContentValues {
         ArrayList<Kipande> kipandes = new ArrayList<>();
 
 
+
         if (!cursor.isLast()) {
 
             while (cursor.moveToNext()) {

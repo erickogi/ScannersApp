@@ -271,4 +271,29 @@ public class DbOperations {
     }
 
 
+    public Cursor search(String search,String date) {
+        SQLiteDatabase db = dbHandler.getReadableDatabase();
+
+
+        String   QUERY = "SELECT * FROM  '" + DbConstants.TABLE_DATA + "'" +
+                " WHERE " + DbConstants.Full_names + " || " + DbConstants.Id_no + " || " + DbConstants.Vehicle_plate + " || " + DbConstants.Office + " || " + DbConstants.TimeStamp+ " LIKE '%" + search + "%' AND "+DbConstants.TimeStamp+"  LIKE '%" + date + "%' ";
+
+
+        Cursor cursor = db.rawQuery(QUERY, null);
+
+        if (cursor.getCount() > 0) {
+
+
+            db.close();
+
+            return cursor;
+
+        } else {
+            db.close();
+
+            return null;
+        }
+
+
+    }
 }

@@ -163,44 +163,9 @@
 		<item>vie</item> <!-- Vietnamese -->
 	</string-array>
 
-	<!-- Unused --> 
-	<string-array name="iso6391">
-		<item>bg</item> <!-- Bulgarian -->
-		<item>ca</item> <!-- Catalan -->
-		<item>zh-CN</item> <!-- Chinese (Simplified) -->
-		<item>zh-TW</item> <!-- Chinese (Traditional) -->
-		<item>cs</item> <!-- Czech -->
-		<item>da</item> <!-- Danish -->
-		<item>nl</item> <!-- Dutch -->
-		<item>en</item> <!-- English -->
-		<item>fi</item> <!-- Finnish -->
-		<item>fr</item> <!-- French -->
-		<item>de</item> <!-- German -->
-		<item>el</item> <!-- Greek -->
-		<item>hu</item> <!-- Hungarian -->
-		<item>id</item> <!-- Indonesian -->
-		<item>it</item> <!-- Italian -->
-		<item>ja</item> <!-- Japanese -->
-		<item>ko</item> <!-- Korean -->
-		<item>lv</item> <!-- Latvian -->
-		<item>lt</item> <!-- Lithuanian -->
-		<item>no</item> <!-- Norwegian -->
-		<item>pl</item> <!-- Polish -->
-		<item>pt</item> <!-- Portuguese -->
-		<item>ro</item> <!-- Romanian -->
-		<item>ru</item> <!-- Russian -->
-		<item>sr</item> <!-- Serbian (Latin) -->
-		<item>sk</item> <!-- Slovak -->
-		<item>sl</item> <!-- Slovenian -->
-		<item>es</item> <!-- Spanish -->
-		<item>sv</item> <!-- Swedish -->
-		<item>tl</item> <!-- Tagalog -->
-		<item>tr</item> <!-- Turkish -->
-		<item>uk</item> <!-- Ukrainian -->
-		<item>vi</item> <!-- Vietnamese -->
-	</string-array>
-	
-	<!-- Translation target codes for Google Translate. -->
+	<!-- Unused -->
+
+    <!-- Translation target codes for Google Translate. -->
 	<!-- The elements in this array must match to the translationtargetlanguagenames_google array. -->
 	<string-array name="translationtargetiso6391_google">
 		<item>af</item> <!-- Afrikaans -->
